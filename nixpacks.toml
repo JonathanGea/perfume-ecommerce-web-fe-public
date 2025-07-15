@@ -7,7 +7,7 @@
 
 # setup phase where we add any needed packages
 [phases.setup]
-    nixPkgs = ['...', 'jq'] # jq is needed to parse the outputPath from our angular.json file
+    nixPkgs = ['nodejs-20_x' 'jq'] # Gunakan Node.js versi 20.x
 
 # download caddy from nix
 [phases.caddy]
