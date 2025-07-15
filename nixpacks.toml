@@ -1,19 +1,22 @@
+# Variabel lingkungan
 [variables]
 NPM_CONFIG_UPDATE_NOTIFIER = "false"
 NPM_CONFIG_FUND = "false"
 
-# nixPkgs harus berada di dalam phases.setup, bukan sebagai variabel terpisah
+# Fase setup - untuk menginstall dependensi
 [phases.setup]
-nixPkgs = ["nodejs-20_x", "jq", "caddy"]  # Ini adalah tempat yang benar untuk mendefinisikan nixPkgs
+nixPkgs = ["nodejs-20_x", "jq", "caddy"]
 
+# Fase caddy - untuk mengonfigurasi Caddy
 [phases.caddy]
 dependsOn = ["setup"]
-nixpkgsArchive = "454765d7f5e4fcdc560e2fc35e0faf3f00721774" # Commit SHA yang valid
+nixpkgsArchive = "454765d7f5e4fcdc560e2fc35e0faf3f00721774"
 
+# Fase format - untuk memformat file Caddyfile
 [phases.fmt]
 dependsOn = ["caddy"]
 cmds = ["caddy fmt --overwrite Caddyfile"]
 
+# Perintah untuk menjalankan aplikasi
 [start]
-# Gunakan format shell script yang kompatibel dengan Dockerfile
 cmd = "export ANGULAR_OUTPUT_PATH=$(jq -r '[.projects[] | .architect.build.options.outputPath][0]' angular.json) && export PATH=$(nix eval --raw nixpkgs#nodejs-20_x)/bin:$PATH && exec caddy run --config Caddyfile --adapter caddyfile 2>&1"
