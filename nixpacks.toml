@@ -4,24 +4,22 @@ NPM_CONFIG_FUND = "false"
 NPM_CONFIG_LOGLEVEL = "verbose"
 
 [phases.setup]
-# Gunakan nodejs_20 yang kompatibel dengan Angular CLI
 nixPkgs = ["nodejs_20", "jq", "caddy"]
 
 [phases.caddy]
 dependsOn = ["setup"]
-# Menggunakan commit Nixpkgs yang stabil dan diketahui memiliki nodejs_20
 nixpkgsArchive = "5bf1cadb72fd5cf8648a373bad50d691c6c91ec3"
 
 [phases.build]
 dependsOn = ["setup"]
 cmds = [
-  # Verifikasi versi Node.js yang digunakan
+  # Verifikasi versi Node.js
   "node --version",
-  # Bersihkan cache npm untuk menghindari masalah cache
+  # Bersihkan cache npm
   "npm cache clean --force",
-  # Hapus node_modules jika ada untuk menghindari konflik
-  "rm -rf node_modules",
-  # Instal dependensi dengan opsi yang lebih fleksibel
+  # Hapus folder node_modules (gunakan `|| true` untuk menghindari error jika folder tidak ada)
+  "rm -rf node_modules || true",
+  # Instal dependensi dengan opsi fleksibel
   "npm install --no-audit --no-fund --legacy-peer-deps || npm install --no-audit --no-fund --force",
   # Build aplikasi Angular
   "npm run build"
@@ -32,5 +30,4 @@ dependsOn = ["caddy", "build"]
 cmds = ["caddy fmt --overwrite Caddyfile"]
 
 [start]
-# Perintah untuk menjalankan server Caddy dengan output Angular
 cmd = "export ANGULAR_OUTPUT_PATH=$(jq -r '[.projects[] | .architect.build.options.outputPath][0]' angular.json) && exec caddy run --config Caddyfile --adapter caddyfile 2>&1"
