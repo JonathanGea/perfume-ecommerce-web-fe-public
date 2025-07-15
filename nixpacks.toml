@@ -4,7 +4,7 @@ NPM_CONFIG_FUND = "false"
 NPM_CONFIG_LOGLEVEL = "verbose"
 
 [phases.setup]
-nixPkgs = ["nodejs_20.19", "jq", "caddy"]
+nixPkgs = ["nodejs_22", "jq", "caddy"]
 
 [phases.caddy]
 dependsOn = ["setup"]
