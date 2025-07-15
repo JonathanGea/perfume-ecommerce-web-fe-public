@@ -1,22 +1,20 @@
-# Variabel lingkungan
 [variables]
 NPM_CONFIG_UPDATE_NOTIFIER = "false"
 NPM_CONFIG_FUND = "false"
 
-# Fase setup - untuk menginstall dependensi
 [phases.setup]
-nixPkgs = ["nodejs-20_x", "jq", "caddy"]
+# Gunakan nodejs tanpa versi spesifik, atau nodejs-20 (tanpa _x) jika tersedia
+nixPkgs = ["nodejs", "jq", "caddy"]
 
-# Fase caddy - untuk mengonfigurasi Caddy
 [phases.caddy]
 dependsOn = ["setup"]
-nixpkgsArchive = "454765d7f5e4fcdc560e2fc35e0faf3f00721774"
+# Gunakan commit yang lebih baru yang diketahui memiliki node.js 20
+nixpkgsArchive = "5bf1cadb72fd5cf8648a373bad50d691c6c91ec3" # Nixpkgs unstable (7 Mei 2024)
 
-# Fase format - untuk memformat file Caddyfile
 [phases.fmt]
 dependsOn = ["caddy"]
 cmds = ["caddy fmt --overwrite Caddyfile"]
 
-# Perintah untuk menjalankan aplikasi
 [start]
-cmd = "export ANGULAR_OUTPUT_PATH=$(jq -r '[.projects[] | .architect.build.options.outputPath][0]' angular.json) && export PATH=$(nix eval --raw nixpkgs#nodejs-20_x)/bin:$PATH && exec caddy run --config Caddyfile --adapter caddyfile 2>&1"
+# Gunakan nodejs tanpa versi spesifik
+cmd = "export ANGULAR_OUTPUT_PATH=$(jq -r '[.projects[] | .architect.build.options.outputPath][0]' angular.json) && export PATH=$(nix eval --raw nixpkgs#nodejs)/bin:$PATH && exec caddy run --config Caddyfile --adapter caddyfile 2>&1"
