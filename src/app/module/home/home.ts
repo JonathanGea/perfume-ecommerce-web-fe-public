@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Renderer2 } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { CardBottom } from '../../shared/component/card-bottom/card-bottom';
 import { ProductCard } from '../../shared/component/product-card/product-card';
 import { ProductDetail } from '../product-detail/product-detail';
@@ -7,6 +7,7 @@ import { Product } from '../../shared/models/product.model';
 import { CartService } from '../../shared/services/cart.service';
 import { ProductService } from '../../shared/services/product.service';
 import { FormsModule } from '@angular/forms';
+import { ToastService } from '../../shared/services/toast.service';
 
 @Component({
   selector: 'app-home',
@@ -14,10 +15,8 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
-export class Home {
-
+export class Home implements OnInit {
   products: Product[] = [];
-
   filteredProducts: Product[] = [];
   selectedProduct: Product | null = null;
   searchQuery: string = '';
@@ -26,37 +25,53 @@ export class Home {
   constructor(
     private productService: ProductService,
     private cartService: CartService,
-    private renderer: Renderer2
+    private toastService: ToastService
   ) { }
 
   ngOnInit(): void {
     this.productService.getProducts().subscribe(products => {
       this.products = products;
+      this.filteredProducts = [...products];
     });
-
-    this.resetFilters()
   }
 
-  onAddToCart(product: Product): void {
-    this.cartService.addToCart(product, 1);
-    // Here you could add a toast/notification
-  }
-
-
-  onProductClicked(product: any) {
+  // Handler for product card click
+  onProductClicked(product: Product): void {
     this.selectedProduct = product;
-    // Ketika detail produk dibuka, nonaktifkan scrolling pada body
-    this.renderer.addClass(document.body, 'overflow-hidden');
   }
 
-  onCloseDetail() {
+  // Handler for closing product detail
+  onCloseDetail(): void {
     this.selectedProduct = null;
-    // Ketika detail produk ditutup, aktifkan kembali scrolling pada body
-    this.renderer.removeClass(document.body, 'overflow-hidden');
   }
 
+  onQuantityChanged(event: { product: Product, quantity: number }): void {
+    const { product, quantity } = event;
+    const previousQuantity = this.getPreviousQuantity(product.id);
 
+    // Gunakan metode baru yang selalu menerima objek product
+    this.cartService.updateOrAddItem(product, quantity);
 
+    // Toast notification logic
+    if (quantity === 0) {
+      this.toastService.showToast(`Removed ${product.name} from cart`, 'info');
+    } else if (previousQuantity === 0) {
+      this.toastService.showToast(`Added ${product.name} to cart`, 'success');
+    } else if (quantity > previousQuantity) {
+      this.toastService.showToast(`Increased ${product.name} quantity`, 'success');
+    } else {
+      this.toastService.showToast(`Decreased ${product.name} quantity`, 'info');
+    }
+  }
+
+  // Helper method to get previous quantity
+  private getPreviousQuantity(productId: number): number {
+    const cartItems = this.cartService.getCartItems();
+    const item = cartItems.find(item => item.product.id === productId);
+    return item ? item.quantity : 0;
+  }
+
+  // Search products based on query
   searchProducts(): void {
     if (!this.searchQuery.trim()) {
       this.applyFilter(this.activeFilter);
@@ -70,19 +85,19 @@ export class Home {
     );
   }
 
+  // Apply filter to products
   setFilter(filter: string): void {
     this.activeFilter = filter;
     this.applyFilter(filter);
   }
 
-  applyFilter(filter: string): void {
+  // Apply selected filter
+  private applyFilter(filter: string): void {
     switch (filter) {
       case 'popular':
-        // This is a placeholder - in a real app, you'd have a popularity metric
         this.filteredProducts = this.products.slice(0, 2);
         break;
       case 'new':
-        // This is a placeholder - in a real app, you'd filter by date
         this.filteredProducts = [this.products[this.products.length - 1]];
         break;
       case 'all':
@@ -91,30 +106,20 @@ export class Home {
         break;
     }
 
-    // If there's a search query, apply it on top of the filter
     if (this.searchQuery.trim()) {
       this.searchProducts();
     }
   }
 
+  // Reset filters
   resetFilters(): void {
     this.searchQuery = '';
     this.activeFilter = 'all';
     this.filteredProducts = [...this.products];
   }
 
+  // Get cart items count for UI
   getCartItemsCount(): number {
     return this.cartService.getCartItemsCount();
   }
-
-  onQuantityChanged(event: {product: Product, quantity: number}): void {
-    const { product, quantity } = event;
-
-    if (quantity > 0) {
-      this.cartService.updateQuantity(product.id, quantity);
-    } else {
-      this.cartService.removeFromCart(product.id);
-    }
-  }
-
 }

@@ -12,7 +12,7 @@ interface CustomerInfo {
   providedIn: 'root'
 })
 export class WhatsAppService {
-  private adminPhoneNumber: string = '6281234567890'; // Change to your WhatsApp number
+  private adminPhoneNumber: string = '6289619166030'; // Change to your WhatsApp number
 
   constructor() { }
 

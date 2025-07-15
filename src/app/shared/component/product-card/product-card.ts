@@ -1,6 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Product } from '../../models/product.model';
 import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-product-card',
@@ -8,40 +10,61 @@ import { CommonModule } from '@angular/common';
   templateUrl: './product-card.html',
   styleUrl: './product-card.css'
 })
-export class ProductCard {
+export class ProductCard implements OnInit, OnDestroy {
   @Input() product!: Product;
-  @Output() productClicked: EventEmitter<any> = new EventEmitter();
+  @Output() productClicked: EventEmitter<Product> = new EventEmitter<Product>();
   @Output() quantityChanged: EventEmitter<{ product: Product, quantity: number }> = new EventEmitter();
 
-  private _quantity: number = 0;
+  quantity: number = 0;
+  private cartSubscription?: Subscription;
 
-  get quantity(): number {
-    return this._quantity;
+  constructor(private cartService: CartService) { }
+
+  ngOnInit(): void {
+    // Initialize quantity from cart (if product is already in cart)
+    this.updateQuantityFromCart();
+
+    // Subscribe to cart changes to keep quantity in sync
+    this.cartSubscription = this.cartService.cartItems$.subscribe(() => {
+      this.updateQuantityFromCart();
+    });
   }
 
-  set quantity(value: number) {
-    // Jika kuantitas berubah, emit event
-    if (this._quantity !== value) {
-      this._quantity = value;
-      this.quantityChanged.emit({ product: this.product, quantity: this._quantity });
+  ngOnDestroy(): void {
+    if (this.cartSubscription) {
+      this.cartSubscription.unsubscribe();
     }
   }
 
-  increaseQuantity(event: Event) {
-    event.stopPropagation();
-    this.quantity++;
+  private updateQuantityFromCart(): void {
+    const cartItems = this.cartService.getCartItems();
+    const cartItem = cartItems.find(item => item.product.id === this.product.id);
+    this.quantity = cartItem ? cartItem.quantity : 0;
   }
 
-  decreaseQuantity(event: Event) {
-    event.stopPropagation();
+  increaseQuantity(event: Event): void {
+    event.stopPropagation(); // Prevent card click
+    this.quantity++;
+    this.emitQuantityChanged();
+  }
+
+  decreaseQuantity(event: Event): void {
+    event.stopPropagation(); // Prevent card click
     if (this.quantity > 0) {
       this.quantity--;
+      this.emitQuantityChanged();
     }
   }
 
-  // Emit event ketika card diklik
-  onCardClick() {
+  private emitQuantityChanged(): void {
+    this.quantityChanged.emit({
+      product: this.product,
+      quantity: this.quantity
+    });
+  }
+
+  onCardClick(): void {
     this.productClicked.emit(this.product);
-    console.log("oncard click");
   }
 }
+

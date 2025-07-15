@@ -11,7 +11,6 @@ export class CartService {
     public cartItems$: Observable<CartItem[]> = this.cartItemsSubject.asObservable();
 
     constructor() {
-        // Load cart from localStorage on service initialization
         this.loadCart();
     }
 
@@ -47,6 +46,26 @@ export class CartService {
         }
     }
 
+    public updateOrAddItem(product: Product, quantity: number): void {
+        if (quantity <= 0) {
+            this.removeFromCart(product.id);
+            return;
+        }
+
+        const currentCart = this.getCartItems();
+        const existingItemIndex = currentCart.findIndex(item => item.product.id === product.id);
+
+        if (existingItemIndex !== -1) {
+            // Update existing item
+            const updatedCart = [...currentCart];
+            updatedCart[existingItemIndex].quantity = quantity;
+            this.saveCart(updatedCart);
+        } else {
+            // Add new item
+            const newItem: CartItem = { product, quantity };
+            this.saveCart([...currentCart, newItem]);
+        }
+    }
 
     public removeFromCart(productId: number): void {
         const currentCart = this.getCartItems();
@@ -68,33 +87,4 @@ export class CartService {
         this.saveCart([]);
     }
 
-    public updateQuantity(productId: number, quantity: number): void {
-        const currentCart = this.getCartItems();
-        const itemIndex = currentCart.findIndex(item => item.product.id === productId);
-
-        if (quantity <= 0) {
-            // Jika kuantitas <= 0, hapus dari keranjang
-            this.removeFromCart(productId);
-            return;
-        }
-
-        if (itemIndex !== -1) {
-            // Item sudah ada di keranjang, update kuantitas
-            const updatedCart = [...currentCart];
-            updatedCart[itemIndex].quantity = quantity;
-            this.saveCart(updatedCart);
-        } else {
-            // Item belum ada di keranjang, temukan produk dan tambahkan
-            const product = this.findProductById(productId);
-            if (product) {
-                this.addToCart(product, quantity);
-            }
-        }
-    }
-
-    private findProductById(productId: number): Product | null {
-        // Implementasi ini harus disesuaikan dengan cara Anda menyimpan/mengakses produk
-        // Contoh sederhana:
-        return null; // Ganti dengan implementasi yang sesuai
-    }
 }
