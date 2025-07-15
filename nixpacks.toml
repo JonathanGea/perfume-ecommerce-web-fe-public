@@ -1,20 +1,22 @@
-nixPkgs = ["nodejs-20_x", "jq", "caddy"]  # Gabungkan semua paket yang dibutuhkan
+[variables]
+NPM_CONFIG_UPDATE_NOTIFIER = "false"
+NPM_CONFIG_FUND = "false"
+
+nixPkgs = ["nodejs-20_x", "jq", "caddy"]
 
 [phases.setup]
-# tidak perlu mendefinisikan nixPkgs lagi
+# tidak perlu mendefinisikan nixPkgs lagi karena sudah ada di atas
 
 [phases.caddy]
 dependsOn = ["setup"]
-nixpkgsArchive = "454765d7f5e4fcdc560e2fc35e0faf3f00721774" # Ganti dengan commit terbaru yang valid
-# tidak perlu mendefinisikan nixPkgs lagi
+nixpkgsArchive = "454765d7f5e4fcdc560e2fc35e0faf3f00721774" # Commit SHA yang valid
 
 [phases.fmt]
 dependsOn = ["caddy"]
 cmds = ["caddy fmt --overwrite Caddyfile"]
 
+# Masalah utama ada di bagian [start]
+# Ganti dengan format yang benar:
 [start]
-cmd = """
-set -a # Export all variables
-source <(nix develop -c 'echo "export ANGULAR_OUTPUT_PATH=$(jq -r \".projects[] | .architect.build.options.outputPath][0]\" angular.json)\nexport PATH=$PATH"')
-exec caddy run --config Caddyfile --adapter caddyfile 2>&1
-"""
+# Gunakan format shell script tanpa source
+cmd = "export ANGULAR_OUTPUT_PATH=$(jq -r '[.projects[] | .architect.build.options.outputPath][0]' angular.json) && export PATH=$(nix eval --raw nixpkgs#nodejs-20_x)/bin:$PATH && exec caddy run --config Caddyfile --adapter caddyfile 2>&1"
