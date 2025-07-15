@@ -3,18 +3,28 @@ NPM_CONFIG_UPDATE_NOTIFIER = "false"
 NPM_CONFIG_FUND = "false"
 
 [phases.setup]
-# Gunakan nodejs tanpa versi spesifik, atau nodejs-20 (tanpa _x) jika tersedia
-nixPkgs = ["nodejs", "jq", "caddy"]
+# Gunakan nodejs_20 untuk mendapatkan versi 20.x yang kompatibel dengan Angular CLI
+nixPkgs = ["nodejs_20", "jq", "caddy"]
 
 [phases.caddy]
 dependsOn = ["setup"]
-# Gunakan commit yang lebih baru yang diketahui memiliki node.js 20
-nixpkgsArchive = "5bf1cadb72fd5cf8648a373bad50d691c6c91ec3" # Nixpkgs unstable (7 Mei 2024)
+# Gunakan commit yang diketahui memiliki nodejs_20
+nixpkgsArchive = "5bf1cadb72fd5cf8648a373bad50d691c6c91ec3" # Nixpkgs unstable (Mei 2024)
+
+[phases.build]
+dependsOn = ["setup"]
+cmds = [
+  # Verifikasi versi Node.js
+  "node --version",
+  # Install dependensi
+  "npm ci",
+  # Build aplikasi Angular
+  "npm run build"
+]
 
 [phases.fmt]
-dependsOn = ["caddy"]
+dependsOn = ["caddy", "build"]
 cmds = ["caddy fmt --overwrite Caddyfile"]
 
 [start]
-# Gunakan nodejs tanpa versi spesifik
-cmd = "export ANGULAR_OUTPUT_PATH=$(jq -r '[.projects[] | .architect.build.options.outputPath][0]' angular.json) && export PATH=$(nix eval --raw nixpkgs#nodejs)/bin:$PATH && exec caddy run --config Caddyfile --adapter caddyfile 2>&1"
+cmd = "export ANGULAR_OUTPUT_PATH=$(jq -r '[.projects[] | .architect.build.options.outputPath][0]' angular.json) && exec caddy run --config Caddyfile --adapter caddyfile 2>&1"
