@@ -1,8 +1,7 @@
-<!-- cart-item.component.html -->
-<div class="bg-white rounded-lg shadow-sm border border-gray-200 p-3 flex cursor-pointer mb-3">
+<div class="bg-white rounded-lg shadow-sm border border-gray-200 p-3 flex cursor-pointer mb-3" (click)="onCardClick($event)">
     <!-- Gambar Produk -->
     <div class="h-24 w-24 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden mr-3">
-        <img [src]="product.imageUrl" alt="{{ product.name }}" class="object-cover w-full h-full">
+        <img [src]="product.imageUrl" [alt]="product.name" class="object-cover w-full h-full">
     </div>
 
     <!-- Detail Produk -->
@@ -18,18 +17,24 @@
 
             <!-- Quantity controls -->
             <div class="flex items-center space-x-2">
-                <button (click)="decreaseQuantity(); $event.stopPropagation()"
-                    class="px-2 py-0.5 bg-gray-200 rounded hover:bg-gray-300 text-lg" 
+                <button (click)="decreaseQuantity($event)"
+                    class="px-2 py-0.5 bg-gray-200 rounded hover:bg-gray-300 text-sm" 
                     [disabled]="quantity <= 0">-</button>
 
                 <input type="text" [value]="quantity" readonly 
                     class="w-8 h-7 text-center border border-gray-300 rounded text-sm" />
 
-                <button (click)="increaseQuantity(); $event.stopPropagation()"
-                    class="px-2 py-0.5 bg-gray-200 rounded hover:bg-gray-300 text-lg">+</button>
+                <button (click)="increaseQuantity($event)"
+                    class="px-2 py-0.5 bg-gray-200 rounded hover:bg-gray-300 text-sm">+</button>
             </div>
         </div>
     </div>
 
-    
+    <!-- Remove Button -->
+    <button (click)="removeItem($event)" 
+        class="self-start text-gray-400 hover:text-gray-600 ml-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+    </button>
 </div>

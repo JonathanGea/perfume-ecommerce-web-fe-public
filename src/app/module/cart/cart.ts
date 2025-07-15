@@ -36,7 +36,7 @@ export class Cart implements OnInit {
     });
   }
 
- 
+
   // Add this method to handle item removal
   onItemRemoved(product: any): void {
     this.cartService.removeFromCart(product.id);
@@ -82,6 +82,23 @@ export class Cart implements OnInit {
 
     // Optionally navigate to a thank you page
     // this.router.navigate(['/thank-you']);
+  }
+
+  onQuantityChanged(event: { product: any, quantity: number }): void {
+    const { product, quantity } = event;
+
+    this.cartService.updateOrAddItem(product, quantity);
+
+  }
+
+  onItemClicked(product: any): void {
+    // Navigate to product detail or perform other actions
+    console.log('Item clicked:', product);
+  }
+
+  clearCart(): void {
+    this.cartService.clearCart();
+    // this.toastService.showToast('Cart has been cleared', 'info');
   }
 
   navigateToHome() {
