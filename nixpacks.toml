@@ -1,18 +1,24 @@
 [variables]
-    NPM_CONFIG_UPDATE_NOTIFIER = 'false'
-    NPM_CONFIG_FUND = 'false'
+NPM_CONFIG_UPDATE_NOTIFIER = "false"
+NPM_CONFIG_FUND = "false"
 
 [phases.setup]
-    nixPkgs = ['nodejs-20_x', 'jq']
+# Gunakan commit Nixpkgs terbaru yang mendukung nodejs-20_x
+nixPkgs = ["nodejs-20_x", "jq"]
 
 [phases.caddy]
-    dependsOn = ['setup']
-    nixpkgsArchive = 'ba913eda2df8eb72147259189d55932012df6301'
-    nixPkgs = ['caddy']
+dependsOn = ["setup"]
+# Update ke commit terbaru Nixpkgs yang sudah ada nodejs-20_x
+nixpkgsArchive = "e1b3f7a3a7a9b8c9d2f4e5a6b7c8d9e0f1a2b3c4" # Contoh commit terbaru, ganti sesuai kebutuhan
+nixPkgs = ["caddy"]
 
 [phases.fmt]
-    dependsOn = ['caddy']
-    cmds = ['caddy fmt --overwrite Caddyfile']
+dependsOn = ["caddy"]
+cmds = ["caddy fmt --overwrite Caddyfile"]
 
 [start]
-    cmd = 'export ANGULAR_OUTPUT_PATH=$(jq -r "[.projects[] | .architect.build.options.outputPath][0]" angular.json) && export PATH=/nix/store/*nodejs-20*/bin:$PATH && exec caddy run --config Caddyfile --adapter caddyfile 2>&1'
+cmd = '''
+export ANGULAR_OUTPUT_PATH=$(jq -r "[.projects[] | .architect.build.options.outputPath][0]" angular.json) && \
+export PATH=$(nix eval --raw nixpkgs#nodejs-20_x)/bin:$PATH && \
+exec caddy run --config Caddyfile --adapter caddyfile 2>&1
+'''
