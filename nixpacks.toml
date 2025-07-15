@@ -3,7 +3,7 @@
     NPM_CONFIG_FUND = 'false'
 
 [phases.setup]
-    nixPkgs = ['nodejs-20_x' 'jq']
+    nixPkgs = ['nodejs-20_x', 'jq']
 
 [phases.caddy]
     dependsOn = ['setup']
