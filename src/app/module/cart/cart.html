@@ -1,0 +1,87 @@
+<!-- cart.component.html -->
+<div class="bg-gray-50 font-sans">
+    <!-- Mobile Container -->
+    <div class="max-w-sm mx-auto bg-white min-h-screen">
+        <!-- Header -->
+        <div class="flex items-center justify-between px-4 py-3 bg-white">
+            <div class="flex items-center space-x-2">
+                <button class="text-gray-800">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
+                        </path>
+                    </svg>
+                </button>
+                <h1 class="text-lg font-semibold text-gray-800">My Cart</h1>
+            </div>
+            <div class="relative">
+                <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z">
+                    </path>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Cart Items -->
+        <div class="px-4 py-3">
+            <div class="grid grid-cols-1 gap-3">
+                <app-product-horizontal-card *ngFor="let item of cartItems" [product]="item.product"
+                    [quantity]="item.quantity" (quantityChanged)="onQuantityChanged($event)"
+                    (removed)="onItemRemoved(item.product)">
+                </app-product-horizontal-card>
+            </div>
+        </div>
+
+
+        <!-- Promo Code -->
+        <div class="px-4 py-3 border-t border-gray-100">
+            <div class="flex items-center">
+                <div class="relative flex-1">
+                    <input type="text" placeholder="Promo Code"
+                        class="w-full pl-4 pr-10 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                </div>
+                <button class="ml-2 px-4 py-2 bg-purple-500 text-white rounded-lg font-medium">
+                    Apply
+                </button>
+            </div>
+        </div>
+
+        <!-- Cart Summary -->
+        <div class="px-4 py-4 bg-gray-50 mt-4">
+            <div class="space-y-3">
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-600">Subtotal</span>
+                    <span class="font-medium text-gray-800">${{ getSubtotal() | number:'1.2-2' }}</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-600">Shipping</span>
+                    <span class="font-medium text-gray-800">${{ shippingCost | number:'1.2-2' }}</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-600">Tax</span>
+                    <span class="font-medium text-gray-800">${{ getTax() | number:'1.2-2' }}</span>
+                </div>
+                <div class="pt-3 border-t border-gray-200 flex justify-between">
+                    <span class="font-semibold text-gray-800">Total</span>
+                    <span class="font-bold text-lg text-purple-600">${{ getTotal() | number:'1.2-2' }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Checkout Button -->
+        <div class="px-4 py-4">
+            <button (click)="checkout()"
+                class="w-full bg-purple-500 text-white py-3 rounded-lg font-bold hover:bg-purple-600 transition duration-200">
+                Proceed to Checkout
+            </button>
+        </div>
+
+        <!-- Continue Shopping -->
+        <div class="px-4 py-3 text-center">
+            <button class="text-purple-500 font-medium" (click)="navigateToHome()"> Continue Shopping</button>
+        </div>
+
+        <!-- Bottom Spacer -->
+        <div class="h-20"></div>
+    </div>
+</div>
