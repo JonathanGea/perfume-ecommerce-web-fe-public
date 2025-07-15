@@ -4,11 +4,11 @@ NPM_CONFIG_FUND = "false"
 NPM_CONFIG_LOGLEVEL = "verbose"
 
 [phases.setup]
-nixPkgs = ["nodejs_20", "jq", "caddy"]
+nixPkgs = ["nodejs_22", "jq", "caddy"]
 
 [phases.caddy]
 dependsOn = ["setup"]
-nixpkgsArchive = "5bf1cadb72fd5cf8648a373bad50d691c6c91ec3"
+nixpkgsArchive = "nixos-unstable"
 
 [phases.build]
 dependsOn = ["setup"]
