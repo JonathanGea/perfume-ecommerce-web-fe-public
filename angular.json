@@ -90,6 +90,7 @@
     }
   },
   "cli": {
-    "analytics": false
+    "analytics": false,
+    "nodeVersion": "20.18.1"
   }
 }
