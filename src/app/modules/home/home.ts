@@ -8,10 +8,12 @@ import { ProductService } from '../../shared/services/product.service';
 import { FormsModule } from '@angular/forms';
 import { ToastService } from '../../shared/services/toast.service';
 import { CartButton } from '../../shared/components/cart-button/cart-button';
+import { Router } from '@angular/router';
+import { PromoBanner } from "./promo-banner/promo-banner";
 
 @Component({
   selector: 'app-home',
-  imports: [FormsModule, CommonModule, ProductCard, CartButton, ProductDetail],
+  imports: [FormsModule, CommonModule, ProductCard, CartButton, ProductDetail, PromoBanner],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
@@ -25,7 +27,8 @@ export class Home implements OnInit {
   constructor(
     private productService: ProductService,
     private cartService: CartService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    public router: Router
   ) { }
 
   ngOnInit(): void {
@@ -122,4 +125,10 @@ export class Home implements OnInit {
   getCartItemsCount(): number {
     return this.cartService.getCartItemsCount();
   }
+  
+  navigateToCart(): void {
+    this.router.navigate(['/cart']);
+  }
+
 }
+

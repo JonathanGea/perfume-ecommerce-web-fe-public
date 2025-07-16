@@ -3,7 +3,7 @@
     <!-- Header with back button -->
     <div class="flex items-center justify-between px-4 py-3 bg-white">
         <div class="flex items-center space-x-2">
-            <button routerLink="/" class="text-gray-800">
+            <button (click)="navigateToHome()" class="text-gray-800">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
@@ -30,7 +30,7 @@
                 </path>
             </svg>
             <p class="text-gray-500 mb-4">Your cart is empty</p>
-            <a routerLink="/" class="text-purple-600 font-medium">Browse Products</a>
+            <button (click)="navigateToHome()" class="text-purple-600 font-medium">Browse Products</button>
         </div>
     </div>
 
