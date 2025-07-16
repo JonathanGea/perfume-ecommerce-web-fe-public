@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductHorizontalCard } from "../../shared/component/product-horizontal-card/product-horizontal-card";
+import { ProductHorizontalCard } from "../../shared/components/product-horizontal-card/product-horizontal-card";
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { CartItem } from '../../shared/models/cart-item.model';

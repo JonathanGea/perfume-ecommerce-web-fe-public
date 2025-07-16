@@ -1,15 +1,14 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { CartService } from '../../services/cart.service';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-card-bottom',
+  selector: 'app-cart-button',
   imports: [],
-  templateUrl: './card-bottom.html',
-  styleUrl: './card-bottom.css'
+  templateUrl: './cart-button.html',
+  styleUrl: './cart-button.css'
 })
-export class CardBottom {
-
+export class CartButton {
   itemCount: number = 0;
   totalPrice: number = 0;
 
@@ -32,5 +31,5 @@ export class CardBottom {
   navigateToCart(): void {
     this.router.navigate(['/cart']);
   }
- 
+
 }

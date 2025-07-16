@@ -1,17 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, Renderer2 } from '@angular/core';
-import { CardBottom } from '../../shared/component/card-bottom/card-bottom';
-import { ProductCard } from '../../shared/component/product-card/product-card';
+import { ProductCard } from '../../shared/components/product-card/product-card';
 import { ProductDetail } from '../product-detail/product-detail';
 import { Product } from '../../shared/models/product.model';
 import { CartService } from '../../shared/services/cart.service';
 import { ProductService } from '../../shared/services/product.service';
 import { FormsModule } from '@angular/forms';
 import { ToastService } from '../../shared/services/toast.service';
+import { CartButton } from '../../shared/components/cart-button/cart-button';
 
 @Component({
   selector: 'app-home',
-  imports: [FormsModule, CommonModule, ProductCard, CardBottom, ProductDetail],
+  imports: [FormsModule, CommonModule, ProductCard, CartButton, ProductDetail],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
