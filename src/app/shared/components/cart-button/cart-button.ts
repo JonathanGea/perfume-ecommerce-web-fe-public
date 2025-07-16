@@ -32,4 +32,8 @@ export class CartButton {
     this.router.navigate(['/cart']);
   }
 
+  getCartItemsCount(): number {
+    return this.cartService.getCartItemsCount();
+  }
+
 }

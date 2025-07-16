@@ -39,7 +39,7 @@
         <div class="space-y-3">
             <div class="flex justify-between text-sm">
                 <span class="text-gray-600">Subtotal</span>
-                <span class="font-medium text-gray-800">{{ getSubtotal() | currency:'IDR' }}</span>
+                <span class="font-medium text-gray-800">{{ getSubtotal() | currency:'IDR':'symbol':'1.0-0' }}</span>
             </div>
             <div class="flex justify-between text-sm">
                 <span class="text-gray-600">Shipping</span>
