@@ -68,7 +68,7 @@ export class Home implements OnInit {
   }
 
   // Helper method to get previous quantity
-  private getPreviousQuantity(productId: number): number {
+  private getPreviousQuantity(productId: string): number {
     const cartItems = this.cartService.getCartItems();
     const item = cartItems.find(item => item.product.id === productId);
     return item ? item.quantity : 0;

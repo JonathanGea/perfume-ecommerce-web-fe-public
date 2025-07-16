@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductHorizontalCard } from "../../shared/components/product-horizontal-card/product-horizontal-card";
-import { CommonModule, DecimalPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { CartItem } from '../../shared/models/cart-item.model';
 import { CartService } from '../../shared/services/cart.service';
@@ -8,7 +8,7 @@ import { WhatsAppService } from '../../shared/services/whatsapp.service';
 
 @Component({
   selector: 'app-cart',
-  imports: [CommonModule, ProductHorizontalCard, DecimalPipe],
+  imports: [CommonModule, ProductHorizontalCard],
   templateUrl: './cart.html',
   styleUrl: './cart.css'
 })
@@ -19,7 +19,7 @@ export class Cart implements OnInit {
   customerAddress: string = '';
   customerPhone: string = '';
 
-  shippingCost: number = 5.00;
+  shippingCost: number = 50000;
   taxRate: number = 0.1; // 10% tax rate
 
   constructor(

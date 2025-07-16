@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { Product } from '../../models/product.model';
 import { CartService } from '../../services/cart.service';
+import { QuantityControlComponent } from '../quantity-control-component/quantity-control-component';
 
 @Component({
   selector: 'app-product-horizontal-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, QuantityControlComponent],
   templateUrl: './product-horizontal-card.html',
   styleUrls: ['./product-horizontal-card.css']
 })
@@ -21,7 +22,7 @@ export class ProductHorizontalCard implements OnInit, OnDestroy {
 
   private cartSubscription?: Subscription;
 
-  constructor(private cartService: CartService) {}
+  constructor(private cartService: CartService) { }
 
   ngOnInit(): void {
     // Sync quantity with cart on initialization
@@ -71,6 +72,11 @@ export class ProductHorizontalCard implements OnInit, OnDestroy {
       product: this.product,
       quantity: this.quantity
     });
+  }
+
+  onQuantityChange(newQuantity: number) {
+    this.quantity = newQuantity;
+    // Emit event atau update service sesuai kebutuhan
   }
 
   removeItem(event?: Event): void {

@@ -67,7 +67,7 @@ export class CartService {
         }
     }
 
-    public removeFromCart(productId: number): void {
+    public removeFromCart(productId: string): void {
         const currentCart = this.getCartItems();
         const updatedCart = currentCart.filter(item => item.product.id !== productId);
         this.saveCart(updatedCart);

@@ -1,0 +1,21 @@
+<div class="flex items-center space-x-3 bg-gray-100 rounded-lg px-3 py-2">
+    <button (click)="decrease()" 
+            class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 transition-colors"
+            [disabled]="quantity <= min" 
+            [class.opacity-50]="quantity <= min"
+            [class.cursor-not-allowed]="quantity <= min">
+        -
+    </button>
+    
+    <span class="w-10 text-center font-medium">
+        {{ quantity }}
+    </span>
+    
+    <button (click)="increase()" 
+            class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 transition-colors"
+            [disabled]="max !== undefined && quantity >= max"
+            [class.opacity-50]="max !== undefined && quantity >= max"
+            [class.cursor-not-allowed]="max !== undefined && quantity >= max">
+        +
+    </button>
+</div>

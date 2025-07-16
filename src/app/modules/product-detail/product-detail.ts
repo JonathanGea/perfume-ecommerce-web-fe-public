@@ -1,29 +1,54 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, Output, Renderer2, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Product } from '../../shared/models/product.model';
+import { CartService } from '../../shared/services/cart.service';
+import { QuantityControlComponent } from "../../shared/components/quantity-control-component/quantity-control-component";
 
 @Component({
   selector: 'app-product-detail',
-  imports: [CommonModule],
+  imports: [CommonModule, QuantityControlComponent],
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.css'
 })
 export class ProductDetail {
-  @Input() product!: {
-    name: string;
-    description: string;
-    price: number;
-    imageUrl: string;
-  };;
+  @Input() product: Product | undefined;
 
   @Output() close: EventEmitter<void> = new EventEmitter<void>();
 
+  constructor(private cartService: CartService) { }
+  
   onClose() {
     this.close.emit();
   }
 
-  addToCart() {
-    console.log('Menambahkan ke cart:', this.product);
-    // Implementasi logic add to cart
-    this.close.emit(); // Tutup modal setelah add to cart
+
+
+  getSpecifications(): { key: string, value: string }[] {
+    if (!this.product?.specifications) return [];
+    return Object.entries(this.product.specifications).map(([key, value]) => ({
+      key,
+      value
+    }));
+  }
+
+  quantity: number = 1;
+
+  increaseQuantity(event: Event): void {
+    event.stopPropagation();
+    this.quantity++;
+  }
+
+  decreaseQuantity(event: Event): void {
+    event.stopPropagation();
+    if (this.quantity > 1) {
+      this.quantity--;
+    }
+  }
+
+  addToCart(): void {
+    if (this.quantity > 0 && this.product) {
+      this.cartService.addToCart(this.product, this.quantity);
+      this.close.emit();
+    }
   }
 }

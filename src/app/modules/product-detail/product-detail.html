@@ -1,87 +1,83 @@
 <!-- product-detail.component.html -->
-<!-- Overlay background (tidak perlu scrolling) -->
 <div class="fixed inset-0 bg-black bg-opacity-50 z-40" *ngIf="product" (click)="onClose()"></div>
 
 <!-- Detail Card -->
-<div class="fixed bottom-0 left-0 right-0 h-[90%] max-w-md mx-auto bg-white z-50 rounded-t-3xl shadow-lg"
-    *ngIf="product">
+<div class="fixed bottom-0 left-0 right-0 h-[90%] max-w-md mx-auto bg-white z-50 rounded-t-3xl shadow-lg" *ngIf="product">
     <!-- Handle untuk indikasi swipe -->
     <div class="w-20 h-1 bg-gray-300 rounded-full mx-auto mt-4 mb-2"></div>
 
     <!-- Area konten yang dapat di-scroll -->
     <div class="p-4 h-full overflow-y-auto pb-24">
         <!-- Gambar produk -->
-        <img [src]="product.imageUrl" alt="{{ product.name }}" class="w-full h-64 object-cover rounded-lg">
+        <img [src]="product.imageUrl" [alt]="product.name" class="w-full h-64 object-cover rounded-lg">
 
         <!-- Informasi produk -->
         <div class="mt-4">
             <h2 class="text-2xl font-bold text-gray-800">{{ product.name }}</h2>
-            <p class="text-purple-600 font-bold text-xl mt-1">{{ product.price | currency:'IDR':'symbol':'1.0-0' }}</p>
+            <p class="text-purple-600 font-bold text-xl mt-1">{{ product.price | currency:'Rp':'symbol':'1.0-0' }}</p>
+
+            <!-- Category & Tags -->
+            <div class="flex flex-wrap gap-2 mt-2">
+                <span *ngIf="product.category" class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">
+                    {{ product.category.name }}
+                </span>
+                <span *ngFor="let tag of product.tag" class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                    {{ tag.name }}
+                </span>
+            </div>
 
             <div class="mt-4">
                 <h3 class="text-lg font-semibold text-gray-700">Description</h3>
                 <p class="text-gray-600 mt-2">{{ product.description }}</p>
             </div>
 
-            <!-- Konten tambahan untuk memastikan ada cukup konten untuk scroll -->
-            <div class="mt-6">
+            <!-- Specifications Section -->
+            <div class="mt-6" *ngIf="product.specifications">
                 <h3 class="text-lg font-semibold text-gray-700">Specifications</h3>
-                <div class="mt-2">
-                    <div class="py-2 border-b border-gray-200">
+                <div class="mt-2 space-y-2">
+                    <div *ngFor="let spec of getSpecifications()" class="py-2 border-b border-gray-200 last:border-b-0">
                         <div class="flex justify-between">
-                            <span class="text-gray-500">Material</span>
-                            <span class="text-gray-800">Premium Quality</span>
+                            <span class="text-gray-500">{{ spec.key }}</span>
+                            <span class="text-gray-800 text-right">{{ spec.value }}</span>
                         </div>
                     </div>
-                    <div class="py-2 border-b border-gray-200">
-                        <div class="flex justify-between">
-                            <span class="text-gray-500">Weight</span>
-                            <span class="text-gray-800">0.5 kg</span>
-                        </div>
-                    </div>
-                    <div class="py-2 border-b border-gray-200">
-                        <div class="flex justify-between">
-                            <span class="text-gray-500">Dimensions</span>
-                            <span class="text-gray-800">10 x 5 x 2 cm</span>
-                        </div>
-                    </div>
-                    <!-- Tambahkan spesifikasi lain jika diperlukan -->
                 </div>
             </div>
 
-            <div class="mt-6">
-                <h3 class="text-lg font-semibold text-gray-700">Reviews</h3>
-                <div class="mt-2 space-y-4">
-                    <div class="bg-gray-50 p-3 rounded-lg">
-                        <div class="flex items-center mb-1">
-                            <span class="font-medium text-gray-800">John Doe</span>
-                            <div class="ml-2 text-yellow-400 flex">
-                                ★★★★★
-                            </div>
-                        </div>
-                        <p class="text-gray-600 text-sm">Great product, very satisfied with the quality!</p>
-                    </div>
-
-                    <div class="bg-gray-50 p-3 rounded-lg">
-                        <div class="flex items-center mb-1">
-                            <span class="font-medium text-gray-800">Jane Smith</span>
-                            <div class="ml-2 text-yellow-400 flex">
-                                ★★★★☆
-                            </div>
-                        </div>
-                        <p class="text-gray-600 text-sm">Good product but could be better.</p>
-                    </div>
-                </div>
-            </div>
+         
         </div>
-        <div class="h-20"></div>
-
+        <div class="h-20"></div> <!-- Spacer for bottom button -->
     </div>
 
     <div class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white border-t border-gray-200 p-4">
-        <button (click)="addToCart()"
-            class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg">
-            Add to Cart
+    <div class="flex items-center justify-between gap-4">
+        <!-- Quantity Controls -->
+        <div class="flex items-center space-x-3 bg-gray-100 rounded-lg px-3 py-2">
+            <button (click)="decreaseQuantity($event)" 
+                    class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 transition-colors"
+                    [disabled]="quantity <= 1" 
+                    [class.opacity-50]="quantity <= 1"
+                    [class.cursor-not-allowed]="quantity <= 1">
+                -
+            </button>
+            
+            <input type="text" [value]="quantity" readonly 
+                   class="w-10 text-center border-0 bg-transparent font-medium" />
+            
+            <button (click)="increaseQuantity($event)" 
+                    class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 transition-colors">
+                +
+            </button>
+        </div>
+
+        <!-- Add to Cart Button -->
+        <button (click)="addToCart()" 
+                class="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-lg transition-colors"
+                [disabled]="quantity === 0"
+                [class.opacity-50]="quantity === 0"
+                [class.cursor-not-allowed]="quantity === 0">
+            Add to Cart - {{ product.price * quantity | currency:'Rp':'symbol':'1.0-0' }}
         </button>
     </div>
+</div>
 </div>

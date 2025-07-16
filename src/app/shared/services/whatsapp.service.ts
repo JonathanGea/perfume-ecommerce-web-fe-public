@@ -17,39 +17,44 @@ export class WhatsAppService {
   constructor() { }
 
   public generateInvoiceText(cartItems: CartItem[], customerInfo: CustomerInfo): string {
-    // Format current date
     const date = new Date();
-    const formattedDate = date.toLocaleDateString();
-
-    // Start building the message
-    let message = `*ORDER INVOICE*\n`;
-    message += `Date: ${formattedDate}\n\n`;
-
-    // Customer info
-    message += `*Customer Details:*\n`;
-    message += `Name: ${customerInfo.name}\n`;
-    message += `Address: ${customerInfo.address}\n`;
-    message += `Phone: ${customerInfo.phone}\n\n`;
-
-    // Order items
-    message += `*Order Items:*\n`;
-
-    cartItems.forEach((item, index) => {
-      message += `${index + 1}. ${item.product.name} x${item.quantity}\n`;
-      message += `   Price: $${item.product.price.toFixed(2)}\n`;
-      message += `   Subtotal: $${(item.product.price * item.quantity).toFixed(2)}\n`;
+    const formattedDate = date.toLocaleDateString('id-ID', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
     });
 
-    // Order summary
     const total = cartItems.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
 
-    message += `\n*Order Summary:*\n`;
-    message += `Total Items: ${cartItems.reduce((count, item) => count + item.quantity, 0)}\n`;
-    message += `Total Amount: $${total.toFixed(2)}\n\n`;
+    const orderItemsText = cartItems.map(item =>
+      `> ${item.product.name}\n  ${item.quantity} x Rp${item.product.price.toLocaleString('id-ID')} = *Rp${(item.product.price * item.quantity).toLocaleString('id-ID')}*`
+    ).join('\n');
 
-    message += `Thank you for your order!`;
+    // Versi invoice tanpa emoji
+    const message = `
+*--- INVOICE PESANAN ---*
 
-    return message;
+Terima kasih telah berbelanja!
+Pesanan Anda sedang kami siapkan.
+
+*Tanggal:* ${formattedDate}
+
+*RINCIAN PRODUK*
+${orderItemsText}
+
+----------------------------------------
+*TOTAL PEMBAYARAN*
+*_Rp${total.toLocaleString('id-ID')}_*
+----------------------------------------
+
+Silakan transfer ke rekening:
+*Bank XYZ* - 1234567890
+(a/n Nama Toko Anda)
+
+Mohon kirimkan bukti transfer agar pesanan bisa segera kami proses. Ditunggu konfirmasinya. Terima kasih.
+  `;
+
+    return message.trim();
   }
 
   public sendToWhatsApp(message: string): void {
