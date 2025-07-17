@@ -1,21 +1,23 @@
 <!-- cart.component.html -->
-<div class="bg-gray-50 font-sans">
+<div class="bg-gray-50 font-sans min-h-screen">
     <!-- Header with back button -->
-    <div class="flex items-center justify-between px-4 py-3 bg-white">
-        <div class="flex items-center space-x-2">
-            <button (click)="navigateToHome()" class="text-gray-800">
+    <div class="flex items-center justify-between px-6 py-4 bg-white shadow-sm sticky top-0 z-10">
+        <div class="flex items-center space-x-3">
+            <button (click)="navigateToHome()" class="text-gray-800 hover:bg-gray-100 p-2 rounded-full transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
             </button>
-            <h1 class="text-lg font-semibold text-gray-800">My Cart</h1>
+            <h1 class="text-xl font-bold text-gray-800">Keranjang Saya</h1>
         </div>
-        <button (click)="clearCart()" class="text-gray-500 text-sm">Clear All</button>
+        <button (click)="clearCart()" class="text-gray-500 text-sm font-medium hover:text-orange-600 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors">
+            Hapus Semua
+        </button>
     </div>
 
     <!-- Cart Items -->
-    <div class="px-4 py-3">
-        <div *ngIf="cartItems.length > 0">
+    <div class="px-6 py-4">
+        <div *ngIf="cartItems.length > 0" class="space-y-4">
             <app-product-horizontal-card *ngFor="let item of cartItems" [product]="item.product"
                 [quantity]="item.quantity" (quantityChanged)="onQuantityChanged($event)"
                 (removed)="onItemRemoved($event)" (itemClicked)="onItemClicked($event)">
@@ -23,51 +25,66 @@
         </div>
 
         <!-- Empty Cart State -->
-        <div *ngIf="cartItems.length === 0" class="text-center py-8">
-            <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
-                </path>
-            </svg>
-            <p class="text-gray-500 mb-4">Your cart is empty</p>
-            <button (click)="navigateToHome()" class="text-purple-600 font-medium">Browse Products</button>
+        <div *ngIf="cartItems.length === 0" class="text-center py-12 px-4">
+            <div class="bg-orange-50 rounded-full w-24 h-24 mx-auto mb-6 flex items-center justify-center">
+                <svg class="w-12 h-12 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
+                    </path>
+                </svg>
+            </div>
+            <h3 class="text-gray-800 font-bold text-xl mb-2">Keranjang Kosong</h3>
+            <p class="text-gray-500 mb-6 max-w-xs mx-auto">Anda belum menambahkan item apapun ke keranjang</p>
+            <button (click)="navigateToHome()" 
+                class="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
+                Jelajahi Menu
+            </button>
         </div>
     </div>
 
     <!-- Cart Summary -->
-    <div *ngIf="cartItems.length > 0" class="px-4 py-4 bg-gray-50 mt-4">
-        <div class="space-y-3">
+    <div *ngIf="cartItems.length > 0" class="px-6 py-5 bg-white mt-4 rounded-t-xl shadow-md">
+        <div class="space-y-4">
             <div class="flex justify-between text-sm">
                 <span class="text-gray-600">Subtotal</span>
                 <span class="font-medium text-gray-800">{{ getSubtotal() | currency:'Rp':'symbol':'1.0-0' }}</span>
             </div>
             <div class="flex justify-between text-sm">
-                <span class="text-gray-600">Shipping</span>
+                <span class="text-gray-600">Biaya Pengiriman</span>
                 <span class="font-medium text-gray-800">{{ shippingCost | currency:'Rp':'symbol':'1.0-0' }}</span>
             </div>
             <div class="flex justify-between text-sm">
-                <span class="text-gray-600">Tax</span>
+                <span class="text-gray-600">Pajak</span>
                 <span class="font-medium text-gray-800">{{ getTax() | currency:'Rp':'symbol':'1.0-0' }}</span>
             </div>
-            <div class="pt-3 border-t border-gray-200 flex justify-between">
-                <span class="font-semibold text-gray-800">Total</span>
-                <span class="font-bold text-lg text-purple-600">{{ getTotal() | currency:'Rp':'symbol':'1.0-0' }}</span>
+            <div class="pt-4 border-t border-gray-200 flex justify-between items-center">
+                <span class="font-semibold text-gray-800">Total Pembayaran</span>
+                <span class="font-bold text-xl text-orange-600">{{ getTotal() | currency:'Rp':'symbol':'1.0-0' }}</span>
             </div>
+        </div>
+
+        <!-- Checkout Button -->
+        <div class="mt-6">
+            <button (click)="checkout()"
+                class="w-full bg-orange-500 text-white py-4 rounded-xl font-bold hover:bg-orange-600 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center">
+                <span>Lanjutkan ke Pembayaran</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </button>
         </div>
     </div>
 
-    <!-- Checkout Button -->
-    <div *ngIf="cartItems.length > 0" class="px-4 py-4">
-        <button (click)="checkout()"
-            class="w-full bg-purple-500 text-white py-3 rounded-lg font-bold hover:bg-purple-600 transition duration-200">
-            Proceed to Checkout
-        </button>
-    </div>
     <!-- Continue Shopping -->
-    <div class="px-4 py-3 text-center">
-        <button class="text-purple-500 font-medium" (click)="navigateToHome()"> Continue Shopping</button>
+    <div class="px-6 py-5 text-center">
+        <button class="text-orange-600 font-medium hover:text-orange-700 transition-colors flex items-center mx-auto" (click)="navigateToHome()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+            </svg>
+            Lanjutkan Belanja
+        </button>
     </div>
 
     <!-- Bottom Spacer -->
-    <div class="h-20"></div>
+    <div class="h-24"></div>
 </div>
