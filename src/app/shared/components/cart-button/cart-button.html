@@ -1,18 +1,18 @@
 <div
     class="sticky bottom-8 left-0 right-0 bg-gradient-to-r from-orange-500 to-orange-600 text-white z-40 mx-4 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-102">
-        <div class="container mx-auto py-4 px-6">
-                <div class="flex items-center justify-between">
-                            <div>
-                                            <p class="text-sm text-white font-medium">Total: <span id="total-item" class="font-semibold">{{
-                                                                    getCartItemsCount() }}</span>
-                                                                                        items</p>
-                                                                                                        <p class="text-lg font-bold tracking-tight"><span id="total-harga">{{ totalPrice |
-                                                                                                                                currency:'Rp':'symbol':'1.0-0' }}</span></p>
-                                                                                                                                            </div>
-                                                                                                                                                        <button (click)="navigateToCart()"
-                                                                                                                                                                        class="bg-white text-orange-600 font-bold py-2.5 px-5 rounded-xl shadow-md hover:bg-gray-50 transition-all duration-300">
-                                                                                                                                                                                        Lihat Keranjang
-                                                                                                                                                                                                    </button>
-                                                                                                                                                                                                            </div>
-                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                </div>
+    <div class="container mx-auto py-4 px-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <p class="text-sm text-white font-medium">Total: <span id="total-item" class="font-semibold">{{
+                        getCartItemsCount() }}</span>
+                    items</p>
+                <p class="text-lg font-bold tracking-tight"><span id="total-harga">{{ totalPrice |
+                        currency:'Rp':'symbol':'1.0-0' }}</span></p>
+            </div>
+            <button (click)="navigateToCart()"
+                class="bg-white text-orange-600 font-bold py-2.5 px-5 rounded-xl shadow-md hover:bg-gray-50 transition-all duration-300">
+                Lihat Keranjang
+            </button>
+        </div>
+    </div>
+</div>
