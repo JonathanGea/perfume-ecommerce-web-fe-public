@@ -10,10 +10,12 @@ import { ToastService } from '../../shared/services/toast.service';
 import { CartButton } from '../../shared/components/cart-button/cart-button';
 import { Router } from '@angular/router';
 import { PromoBanner } from "./promo-banner/promo-banner";
+import { HeroSection } from "./hero-section/hero-section";
+import { SplashScreen } from "../splash-screen/splash-screen";
 
 @Component({
   selector: 'app-home',
-  imports: [FormsModule, CommonModule, ProductCard, CartButton, ProductDetail, PromoBanner],
+  imports: [FormsModule, CommonModule, ProductCard, CartButton, ProductDetail, PromoBanner, HeroSection, SplashScreen],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })

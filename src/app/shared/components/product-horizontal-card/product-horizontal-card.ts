@@ -3,12 +3,11 @@ import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { Product } from '../../models/product.model';
 import { CartService } from '../../services/cart.service';
-import { QuantityControlComponent } from '../quantity-control-component/quantity-control-component';
 
 @Component({
   selector: 'app-product-horizontal-card',
   standalone: true,
-  imports: [CommonModule, QuantityControlComponent],
+  imports: [CommonModule],
   templateUrl: './product-horizontal-card.html',
   styleUrls: ['./product-horizontal-card.css']
 })

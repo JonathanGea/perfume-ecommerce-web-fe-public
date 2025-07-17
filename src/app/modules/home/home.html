@@ -3,9 +3,9 @@
     <div class="flex items-center justify-between px-6 py-4 bg-white shadow-sm sticky top-0 z-10">
         <div class="flex items-center space-x-3">
             <div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center shadow-md">
-                <span class="text-white font-bold text-base">P</span>
+                <span class="text-white font-bold text-base">🥗</span>
             </div>
-            <h1 class="text-xl font-bold text-gray-800">PerfumeShop</h1>
+            <h1 class="text-xl font-bold text-gray-800">Weanakkk</h1>
         </div>
         <div class="flex items-center space-x-4">
             <button (click)="navigateToCart()" class="relative p-2 hover:bg-gray-100 rounded-full transition-colors">
@@ -22,6 +22,7 @@
         </div>
     </div>
 
+
     <!-- Search Bar -->
     <div class="px-6 py-4">
         <div class="relative">
@@ -31,17 +32,16 @@
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
             </div>
-            <input type="text" placeholder="Search perfumes" [(ngModel)]="searchQuery" (input)="searchProducts()"
+            <input type="text" placeholder="Search food" [(ngModel)]="searchQuery" (input)="searchProducts()"
                 class="w-full pl-12 pr-4 py-3.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent shadow-sm bg-white text-gray-700">
         </div>
     </div>
 
     <!-- Promo Banner -->
-    <app-promo-banner class="block mb-4"></app-promo-banner>
 
     <!-- Filter Tabs -->
-    <div class="px-6 py-3">
-        <div class="flex space-x-3 overflow-x-auto pb-2 scrollbar-hide">
+    <div class="px-6 py-2">
+        <div class="flex space-x-3 overflow-x-auto scrollbar-hide">
             <button (click)="setFilter('all')"
                 [ngClass]="{'bg-orange-500 text-white shadow-md': activeFilter === 'all', 'bg-white text-gray-700 border border-gray-200': activeFilter !== 'all'}"
                 class="px-5 py-2.5 rounded-xl text-sm font-medium flex-shrink-0 transition-all duration-300">
@@ -62,8 +62,9 @@
 
     <!-- Product Grid -->
     <div class="container mx-auto">
-        <div class="px-4 py-4">
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div class="px-1 py-1">
+            <div class="grid grid-cols-2 gap-1">
+
                 <app-product-card *ngFor="let product of filteredProducts" [product]="product"
                     (productClicked)="onProductClicked($event)" (quantityChanged)="onQuantityChanged($event)">
                 </app-product-card>
@@ -78,16 +79,17 @@
             </svg>
             <p class="text-gray-600 text-lg mb-2">No products found</p>
             <p class="text-gray-500 text-sm mb-4">Try adjusting your search or filter criteria</p>
-            <button (click)="resetFilters()" 
+            <button (click)="resetFilters()"
+
                 class="mt-2 text-white font-medium bg-orange-500 hover:bg-orange-600 px-6 py-3 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg">
                 Reset Filters
             </button>
         </div>
 
-        <!-- Loading State (optional) -->
         <div *ngIf="isLoading" class="flex justify-center py-8">
             <div class="w-16 h-16 border-4 border-gray-200 border-t-orange-500 rounded-full animate-spin"></div>
-        </div>
+        </div> -->
+
 
         <!-- Product Detail -->
         <app-product-detail *ngIf="selectedProduct" [product]="selectedProduct" (close)="onCloseDetail()">
