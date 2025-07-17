@@ -238,7 +238,7 @@ export class ProductService {
       name: "Es Cendol Durian",
       description: "Minuman tradisional dengan cendol pandan, santan kental, gula merah, dan potongan durian Montong asli. Disajikan dingin dengan es serut.",
       price: 25000,
-      imageUrl: "https://images.unsplash.com/photo-1569058242567-93de6f36f8eb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80",
+      imageUrl: "https://media.istockphoto.com/id/1147519319/photo/es-cendol-durian-or-es-dawet-duren-a-peranakan-icy-dessert-of-pandan-noodle-jelly-with-durian.webp?a=1&b=1&s=612x612&w=0&k=20&c=1UamfPh8EkAPk2gsB-P6VJ2Hb4JoDYxduE2uCzJfrO8=",
       rating: 4.9,
       reviewCount: 412,
       preparationTime: 10,
