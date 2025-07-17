@@ -22,12 +22,9 @@
         </div>
     </div>
 
-    <app-hero-section></app-hero-section>
-
-
 
     <!-- Search Bar -->
-    <div  class="px-6 py-2">
+    <div class="px-6 py-4">
         <div class="relative">
             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -41,7 +38,6 @@
     </div>
 
     <!-- Promo Banner -->
-
 
     <!-- Filter Tabs -->
     <div class="px-6 py-2">
@@ -68,6 +64,7 @@
     <div class="container mx-auto">
         <div class="px-1 py-1">
             <div class="grid grid-cols-2 gap-1">
+
                 <app-product-card *ngFor="let product of filteredProducts" [product]="product"
                     (productClicked)="onProductClicked($event)" (quantityChanged)="onQuantityChanged($event)">
                 </app-product-card>
@@ -83,22 +80,23 @@
             <p class="text-gray-600 text-lg mb-2">No products found</p>
             <p class="text-gray-500 text-sm mb-4">Try adjusting your search or filter criteria</p>
             <button (click)="resetFilters()"
+
                 class="mt-2 text-white font-medium bg-orange-500 hover:bg-orange-600 px-6 py-3 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg">
                 Reset Filters
             </button>
         </div>
 
-        <!-- Loading State (optional)
         <div *ngIf="isLoading" class="flex justify-center py-8">
             <div class="w-16 h-16 border-4 border-gray-200 border-t-orange-500 rounded-full animate-spin"></div>
         </div> -->
+
 
         <!-- Product Detail -->
         <app-product-detail *ngIf="selectedProduct" [product]="selectedProduct" (close)="onCloseDetail()">
         </app-product-detail>
     </div>
 
-    <app-cart-button></app-cart-button>
+    <app-cart-button class="block fixed bottom-6 right-6 z-10"></app-cart-button>
     <!-- Bottom Spacer (for fixed bottom nav) -->
     <div class="h-24"></div>
 </div>
