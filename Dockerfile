@@ -13,14 +13,15 @@ FROM node:20.19.0-alpine
 
 WORKDIR /app
 
-# Install Express untuk server sederhana
-RUN npm install -g express compression
+# Copy package.json server
+COPY server/package.json ./
+RUN npm install
 
 # Copy build output dari stage sebelumnya
 COPY --from=build /app/dist/fe-public /app/public
 
 # Copy server.js
-COPY server.js /app/server.js
+COPY server.js ./
 
 EXPOSE 8080
 
