@@ -2,11 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Product } from '../../shared/models/product.model';
 import { CartService } from '../../shared/services/cart.service';
-import { QuantityControlComponent } from "../../shared/components/quantity-control-component/quantity-control-component";
 
 @Component({
   selector: 'app-product-detail',
-  imports: [CommonModule, QuantityControlComponent],
+  imports: [CommonModule],
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.css'
 })
